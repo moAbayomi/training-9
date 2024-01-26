@@ -37,6 +37,16 @@ contract Thrift {
         addressToParticipant[msg.sender].amountThrifted -= amount;
         overallBal -= amount;
 
+
+        
+        // using the call method instead of transfer requires manually checking success returned true
+        // we're relying on the require to revert if success came out false in this case
+       // (bool success,) = msg.sender.call{value:amount}("");
+       // require(success, "withdraw failed");
+       // return success;
+
+        // the transfer method is really just cleaner, it reverts if anything funny happens with the withdraw 
+        // too much coconut oil, organic coconut oil that is
         payable(msg.sender).transfer(amount);
         emit Withdrawn(amount, msg.sender);
         return true;
